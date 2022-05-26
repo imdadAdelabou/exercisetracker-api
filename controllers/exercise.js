@@ -5,3 +5,7 @@ exports.assignExerciseToUser = async(data) => {
     let exercise = new Exercise(data);
     return exercise.save();
 }
+
+exports.getAllUserExercises = (id) => {
+    return Exercise.find({ user: { _id: id } });
+}

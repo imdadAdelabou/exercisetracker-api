@@ -86,8 +86,30 @@ app.post("/api/users/:_id/exercises", (req, res, next) => {
     });
 });
 
+app.get("/api/users/:_id/logs", (req, res, next) => {
 
-
+    exerciseCtrl.getAllUserExercises(req.params._id).then(async(value) => {
+        if (!value) {
+            return res.status(404).json({ body: "No user found", data: [] });
+        }
+        console.log(value);
+        let user = await userCtrl.getUser(req.params._id);
+        let filterList = [];
+        if (value.length > 0) {
+            for (let log of value) {
+                filterList.push({
+                    description: log.description,
+                    duration: log.duration,
+                    date: log.date,
+                });
+            }
+        }
+        return res.status(200).json({ username: user.username, count: value.length, _id: req.params._id, log: filterList });
+    }).catch((err) => {
+        console.log(err);
+        return res.status(500).json({ error: "Internal Server Error" });
+    });
+});
 
 const listener = app.listen(process.env.PORT || 3000, () => {
     console.log('Your app is listening on port ' + listener.address().port)
