@@ -9,3 +9,7 @@ exports.addUser = async(username) => {
 exports.getUsers = async() => {
     return User.find();
 }
+
+exports.getUser = async(id) => {
+    return User.findById({ "_id": id });
+}

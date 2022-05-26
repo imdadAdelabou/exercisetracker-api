@@ -5,6 +5,9 @@ const connectToDb = require("./utils/connectdb.js");
 const app = express()
 const cors = require('cors')
 const userCtrl = require("./controllers/user.js");
+const exerciseCtrl = require("./controllers/exercise.js");
+const isNotEmpty = require("./utils/isNotEmpty.js");
+
 
 app.use(cors())
 app.use(express.static('public'))
@@ -43,6 +46,39 @@ app.route("/api/users").post((req, res, next) => {
     }
 });
 
+app.post("/api/users/:_id/exercises", (req, res, next) => {
+    let { description, duration, date } = req.body;
+
+    if (isNotEmpty(description) && (isNotEmpty(duration) && Number(duration))) {
+        if (!isNotEmpty(date)) {
+            let actualDate = new Date();
+            req.body.date = actualDate.toDateString();
+        }
+        req.body.duration = Number(req.body.duration);
+        next();
+    } else {
+        return res.status(400).json({ error: "Invalid format" });
+    }
+}, async(req, res, next) => {
+    let userId = req.params._id;
+    userCtrl.getUser(userId).then(async(value) => {
+        if (!value) {
+            return res.status(404).json({ error: "User don't found" });
+        }
+        try {
+            let result = await exerciseCtrl.assignExerciseToUser({
+                user: value,
+                ...req.body
+            });
+
+            return res.status(200).json({ username: result.user.username, description: result.description, duration: result.duration, date: result.date, _id: userId, });
+        } catch (e) {
+            return res.status(500).json({ error: e });
+        }
+    }).catch((err) => {
+        return res.status(500).json({ error: "Internal Server" });
+    });
+});
 
 
 
