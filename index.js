@@ -88,7 +88,7 @@ app.post("/api/users/:_id/exercises", (req, res, next) => {
 
 app.get("/api/users/:_id/logs", (req, res, next) => {
 
-    exerciseCtrl.getAllUserExercises(req.params._id).then(async(value) => {
+    exerciseCtrl.getAllUserExercises(req.params._id, req.query.limit, req.query.from, req.query.to).then(async(value) => {
         if (!value) {
             return res.status(404).json({ body: "No user found", data: [] });
         }
