@@ -55,7 +55,7 @@ app.post("/api/users/:_id/exercises", (req, res, next) => {
             req.body.date = actualDate.toDateString();
         } else {
             let spliDate = req.body.date.split('-');
-            req.body.date = new Date(Number(spliDate[0]), Number(spliDate[1]), Number(spliDate[2])).toDateString();
+            req.body.date = new Date(Number(spliDate[0]), Number(spliDate[1]) - 1, Number(spliDate[2])).toDateString();
         }
         req.body.duration = Number(req.body.duration);
         next();
