@@ -71,7 +71,13 @@ app.post("/api/users/:_id/exercises", (req, res, next) => {
                 ...req.body
             });
 
-            return res.status(200).json({ "username": result.user.username, "description": result.description, "duration": result.duration, "date": result.date, "_id": userId, });
+            return res.status(200).json({
+                "_id": userId,
+                "username": result.user.username,
+                "date": result.date,
+                "duration": result.duration,
+                "description": result.description
+            });
         } catch (e) {
             return res.status(500).json({ error: e });
         }
