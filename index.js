@@ -55,6 +55,8 @@ app.post("/api/users/:_id/exercises", (req, res, next) => {
             req.body.date = actualDate.toDateString();
         }
         req.body.duration = Number(req.body.duration);
+        let spliDate = req.body.date.split('-');
+        req.body.date = new Date(Number(spliDate[0]), Number(spliDate[1]), Number(spliDate[2])).toDateString();
         next();
     } else {
         return res.status(400).json({ error: "Invalid format" });
