@@ -72,7 +72,7 @@ app.post("/api/users/:_id/exercises", (req, res, next) => {
             });
 
             return res.status(200).json({
-                "_id": userId,
+                "_id": result.user._id,
                 "username": result.user.username,
                 "date": result.date,
                 "duration": result.duration,
