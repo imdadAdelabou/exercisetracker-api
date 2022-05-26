@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/views/index.html')
 });
 
-app.post("/api/users", (req, res, next) => {
+app.route("/api/users").post((req, res, next) => {
     let username = req.body.username;
 
     if (username != undefined && username != "" && username != null) {
@@ -34,7 +34,16 @@ app.post("/api/users", (req, res, next) => {
     }
 
     return res.status(200).json({ "username": result.username, "_id": result.id });
+}).get(async(req, res, next) => {
+    try {
+        let result = await userCtrl.getUsers();
+        return res.status(200).json(result);
+    } catch (e) {
+        return res.status(500).json({ error: "Internal Server" });
+    }
 });
+
+
 
 
 

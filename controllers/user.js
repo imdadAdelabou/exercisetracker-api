@@ -5,3 +5,7 @@ exports.addUser = async(username) => {
 
     return user.save();
 }
+
+exports.getUsers = async() => {
+    return User.find();
+}
